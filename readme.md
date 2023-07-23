@@ -11,6 +11,10 @@ Go to debug mode, under Debug, Windows, Open Theads, Parallel Stacks
 
 # Comparsion for Parallel
 
+- Iterations are independent of each other, and not in sequential order.
+- Do Not Assume That Parallel Is Always Faster
+- Store thread-local state during loop execution
+
 |          Method |     Mean |     Error |    StdDev |
 |---------------- |---------:|----------:|----------:|
 |   NormalForEach | 1.226 ms | 0.0204 ms | 0.0346 ms |
@@ -22,27 +26,25 @@ Go to debug mode, under Debug, Windows, Open Theads, Parallel Stacks
 | ParallelGetPrimeList |  58.24 ms |  5.902 ms | 17.40 ms |  70.66 ms |
 
 
-- Iterations are independent of each other, and not in sequential order.
-- Do Not Assume That Parallel Is Always Faster
-- Store thread-local state during loop execution
 
 
 # Race condition
 
 Use thread safe methods
 
+- Interlock
+- Lock
+
 |       Method |     Mean |    Error |   StdDev |
 |------------- |---------:|---------:|---------:|
 |      UseLock | 39.11 ms | 0.435 ms | 0.407 ms |
 | UseInterLock | 17.59 ms | 0.040 ms | 0.039 ms |
 
-- Interlock
-- Lock
 
 
 # Parallel LINQ
 
-```
+```csharp
 // using PLINQ
 var evenNumbers = numbers
 	.AsParallel() //Parallel Processing
@@ -65,7 +67,7 @@ var evenNumbers = numbers
 
 # Cancellation Token
 
-`
+```csharp
 public CancellationTokenSource CTS = new();
 
 CTS.CancelAfter(TimeSpan.FromSeconds(5));
@@ -76,4 +78,4 @@ var parallelOptions = new ParallelOptions()
 	//Set the CancellationToken value
 	CancellationToken = CTS.Token
 };
-`
+```
